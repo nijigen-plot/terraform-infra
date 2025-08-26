@@ -87,3 +87,14 @@ variable "subnet_additional_tags" {
     }
     description = "Additional tags for the Subnets"
 }
+
+variable "igw_additional_tags" {
+    type = map(string)
+    default = {}
+    description = "Additional tags for the Internet Gateway"
+    validation {
+        condition = length(setintersection(keys(var.subnet_additional_tags),
+        ["Name", "Env", "VpcId"]) == 0)
+        error_message = "Key names, Name and Env, VpcId are reserved. Not allowed to use them."
+    }
+}
