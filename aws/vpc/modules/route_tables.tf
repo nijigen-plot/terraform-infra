@@ -12,7 +12,7 @@ resource "aws_route_table" "public_route_tables" {
 
 resource "aws_route" "public_default_route" {
     for_each = aws_subnet.public_subnets
-    route_table_id = aws_route_table.public_route_tables[each.key].identifier
+    route_table_id = aws_route_table.public_route_tables[each.key].id
 
     destination_cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.igw.id
