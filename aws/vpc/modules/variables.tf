@@ -39,21 +39,21 @@ variable "subnet_cidrs" {
 
     # パブリックサブネットのIPが全て正規表現に合致している場合に通る
     validation {
-        condition = (length(setintersection([
-            for cidr in var.subnet_ciders.public : (can(
+        condition = length(setintersection([
+            for cidr in var.subnet_cidrs.public : (can(
                 regex("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}/\\d{1,2}", cidr)
             ) ? cidr : null)
-        ]),
+        ],
         var.subnet_cidrs.public)) == length(var.subnet_cidrs.public)
         error_message = "Specify public subnet CIDR blocks with the CIDR format."
     }
 
     validation {
-        condition = (length(setintersection([
-            for cidr in var.subnet_ciders.private : (can(
+        condition = length(setintersection([
+            for cidr in var.subnet_cidrs.private : (can(
                 regex("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}/\\d{1,2}", cidr)
             ) ? cidr : null)
-        ]),
+        ],
         var.subnet_cidrs.private)) == length(var.subnet_cidrs.private)
         error_message = "Specify private subnet CIDR blocks with the CIDR format."
     }
@@ -82,7 +82,7 @@ variable "subnet_additional_tags" {
     # 特定のキー名は予約語として使用禁止にする
     validation {
         condition = length(setintersection(keys(var.subnet_additional_tags),
-        ["Name", "Env", "AvailabilityZone", "Scope"]) == 0)
+        ["Name", "Env", "AvailabilityZone", "Scope"])) == 0
         error_message = "Key names, Name and Env, AvailabilityZone, Scope are reserved. Not allowed to use them."
     }
     description = "Additional tags for the Subnets"
@@ -93,8 +93,8 @@ variable "igw_additional_tags" {
     default = {}
     description = "Additional tags for the Internet Gateway"
     validation {
-        condition = length(setintersection(keys(var.subnet_additional_tags),
-        ["Name", "Env", "VpcId"]) == 0)
+        condition = length(setintersection(keys(var.igw_additional_tags),
+        ["Name", "Env", "VpcId"])) == 0
         error_message = "Key names, Name and Env, VpcId are reserved. Not allowed to use them."
     }
 }
