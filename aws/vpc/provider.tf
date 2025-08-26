@@ -1,7 +1,7 @@
 provider "aws" {
-    default_tags {
-        tags = {
-            Resource = "Terraform"
-        }
+  default_tags {
+    tags = {
+      Resource = "Terraform"
     }
+  }
 }
