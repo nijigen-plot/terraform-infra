@@ -10,8 +10,7 @@ locals {
 # Elastic IP使わないとIP変わっちゃうので使う(固定する)
 resource "aws_eip" "eips" {
     for_each = local.from_az_to_public_subnet_id
-    # vpc is deprecated Reason: "" とのこと。後で直す
-    vpc = true
+    domain = "vpc"
     tags = {
         Name = "${var.service_name}-${var.env}-${each.key}-eip"
         Env = var.env
