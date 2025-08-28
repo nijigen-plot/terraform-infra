@@ -8,13 +8,74 @@ https://marketplace.visualstudio.com/items?itemName=HashiCorp.terraform
 
 ## Setup
 
-1. touch variables.tf
-2. terraform init
+フォルダ階層はこんな感じになってます。
+
+```
+.
+├── README.md
+├── aws (プロバイダ名)
+│   ├── ecs (サービス名)
+│   │   ├── backend.tf (ステート管理設定)
+│   │   ├── modules (サービス名毎のリソース定義、変数定義、アウトプット定義)
+│   │   │   ├── `aws_service_name`.tf
+│   │   │   ├── outputs.tf
+│   │   │   └── variables.tf
+│   │   ├── provider.tf (プロバイダ定義)
+│   │   └── resources.tf (変数に用いる値を定義)
+│   └── vpc
+│       ├── backend.tf
+│       ├── env (これは使ってない。)
+│       │   ├── README.md
+│       │   ├── dev.tfvars
+│       │   ├── prod.tfvars
+│       │   └── stg.tfvars
+│       ├── modules
+│       │   ├── outputs.tf
+│       │   ├── variables.tf
+│       │   └── `aws_service_name`.tf
+│       ├── provider.tf
+│       └── resources.tf
+└── github
+    └── repository
+        └── main.tf
+```
+
+- `terraform init`までの作り方
+
+1. 適切なプロバイダ名、サービス名を決定してフォルダを作る
+2. `provider.tf`,`backend.tf`を作る。設定は既存サービスのものを参考に
+3. `terraform init`
+4. `terraform workspace new dev`
 
 ### backend
 
-`backend.tf`として記載
+基本AWS S3でステート管理。1.10から[S3単体でもロックが可能](https://github.com/hashicorp/terraform/pull/35661)になったのでそれを使ってます。
 
+```
+terraform {
+  backend "s3" {
+    bucket       = "nijipro-terraform"
+    key          = "aws/${service_name}/${service_name}.tfstate"
+    region       = "ap-northeast-1"
+    profile      = "terraform"
+    use_lockfile = true
+  }
+}
+```
+
+### provider
+
+プロバイダによって設定は変わります。AWSは以下
+
+```
+provider "aws" {
+  default_tags {
+    tags = {
+      Resource = "Terraform"
+    }
+  }
+}
+```
 
 ## Knowledge
 
