@@ -1,5 +1,5 @@
 locals {
-    vpc_cidr = "10.0.0.0/16"
+  vpc_cidr = "10.0.0.0/16"
 }
 
 module "vpc" {
@@ -9,12 +9,12 @@ module "vpc" {
   vpc_cidr_block = local.vpc_cidr
   subnet_cidrs = {
     public = [
-        cidrsubnet(local.vpc_cidr, 6, 1),
-        cidrsubnet(local.vpc_cidr, 6, 2),
+      cidrsubnet(local.vpc_cidr, 6, 1),
+      cidrsubnet(local.vpc_cidr, 6, 2),
     ]
     private = [
-        cidrsubnet(local.vpc_cidr, 6, 10),
-        cidrsubnet(local.vpc_cidr, 6, 20),
+      cidrsubnet(local.vpc_cidr, 6, 10),
+      cidrsubnet(local.vpc_cidr, 6, 20),
     ]
   }
   vpc_additional_tags = {
