@@ -24,7 +24,7 @@ variable "env" {
     }
 }
 
-variable "vpc_additional_tags" {
+variable "additional_tags" {
     type = map(string)
     default = {}
     description = "Additional tags for the VPC"

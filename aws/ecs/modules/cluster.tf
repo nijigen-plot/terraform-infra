@@ -1,6 +1,6 @@
 locals {
     ecs_cluster_tags = merge(
-        var.cluster_additional_tags,
+        var.additional_tags,
         {
             ServiceName = var.service_name
             Env = var.env

@@ -17,7 +17,7 @@ module "vpc" {
         cidrsubnet(local.vpc_cidr, 6, 20),
     ]
   }
-  vpc_additional_tags = {
+  additional_tags = {
     Resource = "Terraform"
   }
 }

@@ -13,12 +13,12 @@ variable "env" {
     }
 }
 
-variable "cluster_additional_tags" {
+variable "additional_tags" {
     type = map(string)
     default = {}
     description = "Additional tags for the ECS Cluster"
     validation {
-        condition = length(setintersection(keys(var.cluster_additional_tags),
+        condition = length(setintersection(keys(var.additional_tags),
         ["ServiceName", "Env"])) == 0
         error_message = "Key names, ServiceName and Env is reserved. Not allowed to use them."
     }
