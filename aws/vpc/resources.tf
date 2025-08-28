@@ -4,7 +4,7 @@ locals {
 
 module "vpc" {
   source         = "./modules"
-  service_name   = "terraform-vpc"
+  service_name   = "vpc"
   env            = terraform.workspace
   vpc_cidr_block = local.vpc_cidr
   subnet_cidrs = {
