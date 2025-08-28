@@ -11,7 +11,7 @@ variable "vpc_cidr_block" {
 
 variable "service_name" {
     type = string
-    description = "VPC name"
+    description = "Service name"
 }
 
 variable "env" {
