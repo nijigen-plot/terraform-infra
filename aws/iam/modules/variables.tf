@@ -49,3 +49,14 @@ variable "inline_policy_documents" {
     default = {}
     description = "Map of inline policy names to JSON policy documents to attach to the IAM Role"
 }
+
+variable "ecr_manipulation_iam_policy_arn" {
+    type = string
+    description = "The ARN of the IAM policy that allows ECR manipulation"
+    default = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"
+
+    validation {
+        condition = can(regex("^arn:aws:iam::aws:policy/.*", var.ecr_manipulation_iam_policy_arn))
+        error_message = "Specify the ARN of an AWS managed IAM policy."
+    }
+}

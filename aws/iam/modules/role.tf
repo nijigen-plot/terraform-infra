@@ -49,3 +49,8 @@ resource "aws_iam_role" "role" {
     name = "${var.service_name}-${var.env}-role"
     assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 }
+
+resource "aws_iam_role_policy_attachment" "managed_policy_attachments" {
+    role = aws_iam_role.role.name
+    policy_arn = "${var.ecr_manipulation_iam_policy_arn}"
+}
