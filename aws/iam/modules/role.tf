@@ -37,7 +37,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
         # sts.amazonaws.comに限定
         condition {
             test = "StringEquals"
-            variable = "token.actinos.githubusercontent.com:aud"
+            variable = "token.actions.githubusercontent.com:aud"
             values = [
                 "sts.amazonaws.com"
             ]
