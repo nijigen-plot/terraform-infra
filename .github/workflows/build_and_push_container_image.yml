@@ -6,6 +6,14 @@ on:
                 description: specify the image repository environment.
                 required: true
                 default: dev
+            service_name:
+                description: specify the service name.
+                required: true
+                default: ecr
+            ecr_role_name:
+                description: specify the ecr role name.
+                required: true
+                default: app
             build_target:
                 description: specify the build target branch.
                 required: true
@@ -42,4 +50,4 @@ jobs:
               with:
                 context: "image"
                 push: true
-                tags: ${{ steps.login-ecr.outputs.registry }}/sample-${{ github.event.inputs.environment }}-web:${{ steps.get-image-tag.outputs.image-tag }}
+                tags: ${{ steps.login-ecr.outputs.registry }}/${{ github.event.inputs.service_name }}-${{ github.event.inputs.environment }}-${{ github.event.inputs.ecr_role_name }}:${{ steps.get-image-tag.outputs.image-tag }}
