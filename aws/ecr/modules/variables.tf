@@ -46,7 +46,7 @@ variable "repository_lifecycle_policy" {
                     "countUnit": "days",
                     "countNumber": 30
             },
-                "aciton": {
+                "action": {
                     "type": "expire"
                 }
             }
