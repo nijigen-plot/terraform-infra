@@ -4,6 +4,6 @@ output "iam_role_arn" {
 }
 
 output "iam_role_name" {
-    description = "The name of the IAM Role"
+    description = "The name of the IAM Role Name"
     value = aws_iam_role.role.name
 }
