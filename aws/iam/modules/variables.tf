@@ -60,3 +60,15 @@ variable "ecr_manipulation_iam_policy_arn" {
         error_message = "Specify the ARN of an AWS managed IAM policy."
     }
 }
+
+variable "ecs_task_role_managed_policy_arns" {
+    type = list(string)
+    description = "Specify Arn list for ECS task role managed policy."
+    # ここにポリシー入れる。アプリが何をするかに依存する。参考書ではただhtml配置してるだけなので全く要らない
+    default = [
+    ]
+    validation {
+        condition = length(var.ecs_task_role_managed_policy_arns) <= 10
+        error_message = "Number of managed policies attached must be at most 10."
+    }
+}
