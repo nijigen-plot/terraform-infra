@@ -55,7 +55,7 @@ variable "task_role_arn" {
     description = "The ARN of the IAM role that the task can assume. Reference from outside of this module."
 
     validation {
-        condition = can(regex("^arn:aws:iam::aws:role/.*", var.task_role_arn))
+        condition = can(regex("^arn:aws:iam::[0-9]{12}:role/.*", var.task_role_arn))
         error_message = "Specify the ARN of an AWS managed IAM Role."
     }
 }
@@ -65,7 +65,7 @@ variable "task_exec_role_arn" {
     description = "The ARN of the IAM role that the task can assume for execution. Reference from outside of this module."
 
     validation {
-        condition = can(regex("^arn:aws:iam::aws:role/.*", var.task_exec_role_arn))
+        condition = can(regex("^arn:aws:iam::[0-9]{12}:role/.*", var.task_exec_role_arn))
         error_message = "Specify the ARN of an AWS managed IAM Role."
     }
 }
