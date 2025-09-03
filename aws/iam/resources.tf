@@ -1,4 +1,4 @@
-module "iam_oidc_provider" {
+module "iam" {
   source                   = "./modules"
   service_name             = "iam"
   env                      = terraform.workspace
