@@ -8,8 +8,8 @@ locals {
     )
     task_family_name = "${var.service_name}-${var.env}-task"
     container_base = jsondecode(var.container_base)
-    container_definition = merge(
-        jsondecode(local.container_base),
+    container_definition = jsonencode([merge(
+        local.container_base,
         {
             logConfiguration = merge(
                 local.container_base.logConfiguration, {
@@ -22,7 +22,7 @@ locals {
                 }
             )
         }
-    )
+    )])
 }
 
 resource "aws_ecs_task_definition" "task_definition" {
