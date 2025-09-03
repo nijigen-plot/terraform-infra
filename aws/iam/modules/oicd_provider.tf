@@ -21,4 +21,8 @@ resource "aws_iam_openid_connect_provider" "github" {
     tags = merge(
         var.oicd_additional_tags
     )
+
+    lifecycle {
+        prevent_destroy = true
+    }
 }
