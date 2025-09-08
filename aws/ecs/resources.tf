@@ -20,7 +20,7 @@ data "terraform_remote_state" "iam" {
 
 module "ecs" {
   source             = "./modules"
-  service_name       = "ecs"
+  service_name       = "terraform-tutorial"
   env                = terraform.workspace
   task_role_arn      = data.terraform_remote_state.iam.outputs.ecs_task_iam_role_arn
   task_exec_role_arn = data.terraform_remote_state.iam.outputs.ecs_task_exec_iam_role_arn
