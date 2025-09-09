@@ -6,3 +6,5 @@ terraform {
     }
   }
 }
+
+provider "github" {}
