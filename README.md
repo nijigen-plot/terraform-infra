@@ -24,20 +24,22 @@ https://marketplace.visualstudio.com/items?itemName=HashiCorp.terraform
 │   │   └── resources.tf (変数に用いる値を定義)
 │   └── vpc
 │       ├── backend.tf
-│       ├── env (これは使ってない。)
-│       │   ├── README.md
-│       │   ├── dev.tfvars
-│       │   ├── prod.tfvars
-│       │   └── stg.tfvars
 │       ├── modules
 │       │   ├── outputs.tf
 │       │   ├── variables.tf
 │       │   └── `aws_service_name`.tf
 │       ├── provider.tf
 │       └── resources.tf
-└── github
-    └── repository
-        └── main.tf
+├── github
+│   ├── README.md
+│   └── repository
+│       ├── backend.tf
+│       ├── modules
+│       │   ├── repository.tf
+│       │   └── variables.tf
+│       ├── provider.tf
+│       └── resources.tf
+other
 ```
 
 - `terraform init`までの作り方
@@ -55,7 +57,7 @@ https://marketplace.visualstudio.com/items?itemName=HashiCorp.terraform
 terraform {
   backend "s3" {
     bucket       = "nijipro-terraform"
-    key          = "aws/${service_name}/${service_name}.tfstate"
+    key          = "${provider_name}/${service_name}/${service_name}.tfstate"
     region       = "ap-northeast-1"
     profile      = "terraform"
     use_lockfile = true
@@ -76,6 +78,16 @@ provider "aws" {
   }
 }
 ```
+
+## provider
+
+### AWS
+
+現状はterraform勉強用。余裕あったら既存リソースを取り込む
+
+### GitHub
+
+リポジトリ作成はこちらでやる。余裕あったら既存リポジトリを取り込む
 
 ## Knowledge
 
