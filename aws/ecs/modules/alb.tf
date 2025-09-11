@@ -16,7 +16,7 @@ resource "aws_lb" "alb" {
     subnets = var.alb_subnet_ids
     security_groups = var.alb_security_group_ids
     access_logs {
-        bucket = aws_s3_bucket.log_bucket.bucket
+        bucket = "${var.alb_log_bucket_name}"
         enabled = true
     }
     tags = local.alb_tags
@@ -38,14 +38,14 @@ data "aws_iam_policy_document" "log_bucket_policy_document" {
             "s3:PutObject"
         ]
         resources = [
-            aws_s3_bucket.log_bucket.arn, # ここoutputからALBログ専用のS3を参照するようにする
-            "${aws_s3_bucket.log_bucket.arn}/*"
+            "${var.alb_log_bucket_arn}",
+            "${var.alb_log_bucket_arn}/*"
         ]
     }
 }
 
 resource "aws_s3_bucket_policy" "log_bucket_policy" {
-    bucket = aws_s3_bucket.log_bucket.id # ここもoutput
+    bucket = "${var.alb_log_bucket_id}"
     policy = data.aws_iam_policy_document.log_bucket_policy_document.json
 }
 

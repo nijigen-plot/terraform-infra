@@ -228,6 +228,21 @@ variable "alb_target_group_health_check_healthy_threshold" {
     default = 3
 }
 
+variable "alb_log_bucket_name" {
+    type = string
+    description = "ALB Log S3 Bucket Name"
+}
+
+variable "alb_log_bucket_arn" {
+    type = string
+    description = "ALB Log S3 Bucket Arn"
+}
+
+variable "alb_log_bucket_id" {
+    type = string
+    description = "ALB Log S3 Bucket ID"
+}
+
 variable "ecs_service_enable_execute_command" {
     type = bool
     description = "ECS Execの有効化の有無。docker execみたいなやつ"
