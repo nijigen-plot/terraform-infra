@@ -59,7 +59,7 @@ resource "aws_alb_listener" "http_listener_forward" {
     port = 80
     default_action {
         type = "forward"
-        target_group_arn = aws_alb_target_group.target_group_arn
+        target_group_arn = aws_alb_target_group.target_group.arn
     }
     tags = local.alb_tags
 }
