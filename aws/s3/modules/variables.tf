@@ -19,6 +19,11 @@ variable "env" {
     }
 }
 
+variable "postfix" {
+    type = string
+    description = "the postfix for to make it unique"
+}
+
 variable "force_destroy" {
     type = bool
     default = false

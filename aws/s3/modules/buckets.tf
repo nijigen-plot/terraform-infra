@@ -22,6 +22,6 @@ resource "aws_s3_bucket_acl" "bucket_acl" {
 resource "aws_s3_bucket_versioning" "versioning_example" {
     bucket = aws_s3_bucket.bucket.id
     versioning_configuration {
-      status = var.s3_bucket_versioning_status
+    status = var.s3_bucket_versioning_status
     }
 }
