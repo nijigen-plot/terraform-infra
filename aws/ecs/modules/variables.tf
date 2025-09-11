@@ -1,7 +1,15 @@
+# localsのdomain系だけややこしいのでメモ
+# 1. まず空文字の状態でterraform applyしてECS/ALB作成
+# 2. ALBのDNS名でHTTPアクセス確認
+# 3. Route53でホストゾーン作成（terraform-sample.quark-hardcore.com）
+# 4. LightsailでNSレコード追加（Route53のネームサーバーを指定）
+# 5. certificate_domain = "terraform-sample.quark-hardcore.com"に変更
+# 6. terraform applyでSSL証明書作成
+# 7. Route53でAliasレコード作成（ALBのDNS名を指定）
 locals {
     ecs_cluster_name = "${var.service_name}-${var.env}-cluster"
     ecs_task_family = "${var.service_name}-${var.env}-task"
-    certificate_domain = "" # あとでroute53から適当なドメイン取ってくる
+    certificate_domain = ""
     dns_hosted_zone_domain = ""
     dns_a_record = ""
     ecs_service_is_load_balancer_active = var.ecs_service_alb_target_group_arn != "" ? [1] : []
