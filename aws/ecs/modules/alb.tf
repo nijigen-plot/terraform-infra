@@ -26,7 +26,7 @@ data "aws_iam_policy_document" "log_bucket_policy_document" {
     version = "2012-10-17"
     statement {
         effect = "Allow"
-        principal {
+        principals {
             type = "AWS"
             identifiers = [
                 # https://docs.aws.amazon.com/ja_jp/elasticloadbalancing/latest/application/enable-access-logging.html
