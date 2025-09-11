@@ -19,9 +19,9 @@ variable "env" {
     }
 }
 
-variable "postfix" {
+variable "prefix" {
     type = string
-    description = "the postfix for to make it unique"
+    description = "the prefix for to make it unique"
 }
 
 variable "force_destroy" {

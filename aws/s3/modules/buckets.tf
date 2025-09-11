@@ -9,7 +9,7 @@ locals {
 }
 
 resource "aws_s3_bucket" "bucket" {
-    bucket = "${var.service_name}-${var.env}-${var.postfix}"
+    bucket = "${var.prefix}-${var.service_name}-${var.env}"
     force_destroy = var.force_destroy
     tags = local.s3_tags
 }
