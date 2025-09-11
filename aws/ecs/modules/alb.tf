@@ -22,7 +22,7 @@ resource "aws_lb" "alb" {
     tags = local.alb_tags
 }
 
-resource "aws_iam_policy_document" "log_bucket_policy_document" {
+data "aws_iam_policy_document" "log_bucket_policy_document" {
     version = "2012-10-17"
     statement {
         effect = "Allow"
