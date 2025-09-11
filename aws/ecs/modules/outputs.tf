@@ -13,3 +13,11 @@ output "task_definition_arn" {
 output "task_family_name" {
     value = aws_ecs_task_definition.task_definition.family
 }
+
+output "alb_fqdn" {
+    value = aws_lb.alb.dns_name
+}
+
+output "alb_zone_id" {
+    value = aws_lb.alb.zone_id
+}
