@@ -16,9 +16,9 @@ resource "aws_security_group_rule" "ingress_cidr_security_group_rules" {
     security_group_id = aws_security_group.security_group.id
     type = "ingress"
     protocol = "TCP"
-    from_port = each.value
-    to_port = each.value
-    cidr_blocks = var.security_group_ingress_cidrs
+    from_port = tonumber(each.value)
+    to_port = tonumber(each.value)
+    cidr_blocks = length(var.security_group_ingress_cidrs) > 0 ? var.security_group_ingress_cidrs : ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "ingress_sg_security_group_rules" {
@@ -26,8 +26,8 @@ resource "aws_security_group_rule" "ingress_sg_security_group_rules" {
     type = "ingress"
     security_group_id = aws_security_group.security_group.id
     protocol = "TCP"
-    from_port = each.value[0] # 配列の1つ目がport番号なので
-    to_port = each.value[0]
+    from_port = tonumber(each.value[0]) # 配列の1つ目がport番号なので
+    to_port = tonumber(each.value[0])
     source_security_group_id = each.value[1] # 配列の2つ目がセキュリティグループなので
 }
 
@@ -37,7 +37,7 @@ resource "aws_security_group_rule" "security_group_rule_egress" {
     protocol = "-1"
     from_port = 0
     to_port = 0
-    cidr_blocks = var.security_group_egress_cidrs
+    cidr_blocks = length(var.security_group_egress_cidrs) > 0 ? var.security_group_egress_cidrs : ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "security_group_rule_egress_sgs" {
