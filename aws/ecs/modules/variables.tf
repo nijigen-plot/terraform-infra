@@ -198,11 +198,6 @@ variable "alb_https_listener_ssl_policy" {
     default = "ELBSecurityPolicy-2016-08"
 }
 
-variable "alb_https_certificate_arn" {
-    type = string
-    description = "SSL for ALB HTTP listener"
-    default = "" # ここ依存関係を持ちつつ今の構成難しいので発行後確認してハードコードする
-}
 
 variable "alb_vpc_id" {
     type = string
