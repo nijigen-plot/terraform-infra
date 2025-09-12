@@ -15,7 +15,7 @@ resource "aws_ecs_service" "service" {
 
     cluster = var.ecs_service_cluster_arn
 
-    task_definition = var.ecs_service_task_definition_arn
+    task_definition = aws_ecs_task_definition.task_definition.arn
 
     desired_count = var.ecs_service_task_desired_count
     deployment_maximum_percent = var.ecs_service_task_maximum_percent

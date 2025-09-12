@@ -303,9 +303,3 @@ variable "ecs_service_deployment_controller" {
 variable "ecs_service_alb_target_group_container_name" {
     type = string
 }
-
-variable "ecs_service_task_definition_arn" {
-    type = string
-    description = "The ARN of the ECS task definition to run in the ECS service."
-    default = "" # ここ依存関係を持ちつつ今の構成難しいので発行後確認してハードコードする
-}
