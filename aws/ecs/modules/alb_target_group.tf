@@ -8,7 +8,7 @@ locals {
     )
 }
 resource "aws_alb_target_group" "target_group" {
-    name = "${var.service_name}-${var.env}-alb-target-group"
+    name = "${var.service_name}-${var.env}-alb-tg"
     vpc_id = var.alb_vpc_id
     target_type = "ip"
 
