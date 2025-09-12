@@ -98,3 +98,67 @@ variable "igw_additional_tags" {
         error_message = "Key names, Name and Env, VpcId are reserved. Not allowed to use them."
     }
 }
+
+# var.security_group_ingress_portsはlist(number)なのでlist(string)に変換。for_eachはlist(number)に対応していない
+# toset(list(string))とすることでfor_eachが可能
+# https://discuss.hashicorp.com/t/for-each-with-list-number/6596/2
+locals {
+    ingress_cidr_ports = [ for v in var.security_group_ingress_ports : tostring(v)]
+}
+
+# setproductは総当たりする関数。
+# join(",", v) => vとしているので、"var.security_group_ingress_ports,var.security_group_ingress_sgs"キーに[var.security_group_ingress_ports, var.security_group_ingress_sgs]が入る。
+# で配列の要素総当たり
+locals {
+    ingress_sg_rules = { for v in setproduct(var.security_group_ingress_ports, var.security_group_ingress_sgs) : join(",", v) => v }
+}
+
+variable "security_group_ingress_ports" {
+    type = list(number)
+    description = "Ingress allow port numbers"
+    default = [
+        80
+    ]
+}
+
+variable "security_group_ingress_cidrs" {
+    type = list(string)
+    description = "Ingress allow cidrs"
+    default = []
+}
+
+variable "security_group_egress_cidrs" {
+    type = list(string)
+    description = "Egress allow cidrs"
+    default = []
+}
+
+variable "security_group_ingress_sgs" {
+    type = list(string)
+    description = "Ingress allow security_groups"
+    default = []
+}
+
+variable "security_group_egress_sgs" {
+    type = list(string)
+    description = "egress allow security_groups"
+    default = []
+}
+
+variable "security_group_ingress_allow_self" {
+    type = bool
+    description = "Ingress allow yourself security_group"
+    default = false
+}
+
+variable "security_group_tags" {
+    type = map(string)
+    default = {}
+    description = "Additional tags for the Security Group"
+
+    validation {
+        condition = length(setintersection(keys(var.security_group_tags),
+        ["Name", "Env", "VpcId"])) == 0
+        error_message = "Key names, Name and Env, VpcID are reserved. Not allowed to use them."
+    }
+}

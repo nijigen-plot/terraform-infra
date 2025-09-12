@@ -9,7 +9,7 @@ on:
             service_name:
                 description: specify the service name.
                 required: true
-                default: ecr
+                default: terraform-tutorial
             ecr_role_name:
                 description: specify the ecr role name.
                 required: true

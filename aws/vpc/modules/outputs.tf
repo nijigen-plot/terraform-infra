@@ -16,9 +16,19 @@ output "public_subnets" {
     value = {for subnet in aws_subnet.public_subnets : subnet.availability_zone => subnet.id}
 }
 
+output "public_subnet_ids" {
+    description = "Public Subnet IDs as list"
+    value = [for subnet in aws_subnet.public_subnets : subnet.id]
+}
+
 output "private_subnets" {
     description = "private Subnets"
     value = {for subnet in aws_subnet.private_subnets : subnet.availability_zone => subnet.id}
+}
+
+output "private_subnet_ids" {
+    description = "Private Subnet IDs as list"
+    value = [for subnet in aws_subnet.private_subnets : subnet.id]
 }
 
 output "public_route_tables" {
@@ -29,4 +39,9 @@ output "public_route_tables" {
 output "private_route_tables" {
     description = "private Route Tables"
     value = {for route_table in aws_route_table.private_route_tables : route_table.tags["AvailabilityZone"] => route_table.id}
+}
+
+output "security_group_id" {
+    description = "Security Group ID"
+    value = aws_security_group.security_group.id
 }
