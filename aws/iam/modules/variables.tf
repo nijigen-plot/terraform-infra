@@ -44,11 +44,6 @@ variable "managed_iam_policy_arns" {
     description = "List of managed IAM policy ARNs to attach to the IAM Role"
 }
 
-variable "inline_policy_documents" {
-    type = map(string)
-    default = {}
-    description = "Map of inline policy names to JSON policy documents to attach to the IAM Role"
-}
 
 variable "ecr_manipulation_iam_policy_arn" {
     type = string
@@ -71,4 +66,16 @@ variable "ecs_task_role_managed_policy_arns" {
         condition = length(var.ecs_task_role_managed_policy_arns) <= 10
         error_message = "Number of managed policies attached must be at most 10."
     }
+}
+
+variable "ecs_service_arn" {
+    type = string
+}
+
+variable "task_role_arn" {
+    type = string
+}
+
+variable "task_definition_arn_without_revision" {
+    type = string
 }
