@@ -187,7 +187,8 @@ data "aws_iam_policy_document" "deploy_service" {
 
         resources = [
             "${var.task_role_arn}",
-            "arn:aws:iam::${data.aws_caller_identity.caller_identity.account_id}:role/${var.service_name}-${var.env}-ecs-task-exec-role"
+            "arn:aws:iam::${data.aws_caller_identity.caller_identity.account_id}:role/${var.service_name}-${var.env}-ecs-task-exec-role",
+            "arn:aws:iam::${data.aws_caller_identity.caller_identity.account_id}:role/${var.service_name}-${var.env}-role"
         ]
     }
 
