@@ -10,6 +10,9 @@ output "task_definition_arn" {
     value = aws_ecs_task_definition.task_definition.arn
 }
 
+output "task_definition_arn_without_revision" {
+    value = aws_ecs_task_definition.task_definition.arn_without_revision
+}
 output "task_family_name" {
     value = aws_ecs_task_definition.task_definition.family
 }
@@ -20,4 +23,8 @@ output "alb_fqdn" {
 
 output "alb_zone_id" {
     value = aws_lb.alb.zone_id
+}
+
+output "ecs_service_arn" {
+    value = aws_ecs_service.service.id
 }

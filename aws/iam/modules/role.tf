@@ -118,3 +118,87 @@ resource "aws_iam_role_policy" "ecs_task_exec_role_policy" {
     role = aws_iam_role.ecs_task_exec_role.id
     policy = data.aws_iam_policy_document.ecs_task_exec_role_policy_document.json
 }
+
+data "aws_iam_policy_document" "ecr_login" {
+    version = "2012-10-17"
+    statement {
+        sid = "GetAuthorizationToken"
+        effect = "Allow"
+        actions = [
+            "ecr:GetAuthorizationToken"
+        ]
+        resources = [
+            "*"
+        ]
+    }
+}
+
+data "aws_iam_policy_document" "docker_image_pull" {
+    version = "2012-10-17"
+    statement {
+        sid = "AllowPull"
+        effect = "Allow"
+        actions = [
+            "ecr:BatchGetImage",
+            "ecr:GetDownloadUrlForLayer"
+        ]
+        resources = [
+            "arn:aws:ecr:ap-notrheast-1:${data.aws_caller_identity.caller_identity.account_id}:repository/${var.service_name}-${var.env}-app"
+        ]
+    }
+}
+
+data "aws_iam_policy_document" "deploy_service" {
+    version = "2012-10-17"
+    statement {
+        sid = "RegisterTaskDefinition"
+        effect = "Allow"
+        actions = [
+            "ecs:RegisterTaskDefinition"
+        ]
+        resources = ["*"]
+    }
+    statement {
+        sid = "DescribeTaskDefinition"
+        effect = "Allow"
+        actions = [
+            "ecs:DescribeTaskDefinition"
+        ]
+        resources = ["*"]
+    }
+    statement {
+        sid = "DeployService"
+        effect = "Allow"
+        actions = [
+            "ecs:UpdateService",
+            "ecs:DescribeServices"
+        ]
+        resources = [
+            var.ecs_service_arn
+        ]
+    }
+
+    statement {
+        sid = "PassRolesInTaskDefinition"
+        effect = "Allow"
+        actions = [
+            "iam:PassRole"
+        ]
+
+        resources = [
+            "${var.task_role_arn}",
+            "arn:aws:iam::${data.aws_caller_identity.caller_identity.account_id}:role/${var.service_name}-${var.env}-ecs-task-exec-role"
+        ]
+    }
+
+    statement {
+        sid = "TagResourceOnTaskDefinition"
+        effect = "Allow"
+        actions = [
+            "ecs:TagResource"
+        ]
+        resources = [
+            "${var.task_definition_arn_without_revision}:*"
+        ]
+    }
+}

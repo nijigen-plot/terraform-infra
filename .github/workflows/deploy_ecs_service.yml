@@ -1,0 +1,83 @@
+name: deploy-ecs-service
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy service.
+        required: true
+        default: dev
+      service_name:
+        description: specify the service name.
+        required: true
+        default: terraform-tutorial
+      deploy_target:
+        description: Tag name or branch name to deploy e.g. v1.0.0, develop ~
+        required: true
+        default: main
+      aws_region:
+        description: AWS Region
+        required: true
+        default: ap-northeast-1
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  deploy:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.deploy_target }}
+      - name: Get image tag
+        id: get-image-tag
+        run: |
+          SHORT_COMMIT_ID=`git rev-parse --short HEAD`
+          REF=`echo ${{ github.event.inputs.deploy_target }} | sed  -e 's/\//-/g'`
+          echo "image-tag=${REF}-${SHORT_COMMIT_ID}" >> $GITHUB_OUTPUT
+      - name: Get AWS Account ID
+        id: get-aws-account-id
+        run: |
+          export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          echo "AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID" >> $GITHUB_ENV
+      - name: Assume role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ github.event.inputs.service_name}}-${{ github.event.inputs.environment }}-role
+          aws-region: ${{ github.event.inputs.aws_region }}
+      - name: Login to Amazon ECR
+        id : login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Check docker image exists
+        id: check-docker-image
+        env:
+          DOCKER_IMAGE_REPOSITORY: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ github.event.inputs.aws_region }}.amazonaws.com/${{ github.event.inputs.service_name }}-${{ github.event.inputs.environment }}-web
+        run: |
+          docker pull $DOCKER_IMAGE_REPOSITORY:${{ steps.get-image-tag.outputs.image-tag }}
+          if [ "$?" -ne 0 ]; then
+            exit 1
+          fi
+      - name: Download ECS task definition
+        id : download-task-definition
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ github.event.inputs.service_name }}-${{ github.event.inputs.environment }}-task --query taskDefinition --region ${{ github.event.inputs.aws_region }} > taskdef.json
+          if [ "$?" -ne 0 ]; then
+            exit 1
+          fi
+      - name: Render ECS task definition
+        id: render-task-definition
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        env:
+          DOCKER_IMAGE_REPOSITORY: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ github.event.inputs.aws_region }}.amazonaws.com/${{ github.event.inputs.service_name }}-${{ github.event.inputs.environment }}-web
+        with:
+          task-definition: taskdef.json
+          container-name: nginx
+          image: ${{ env.DOCKER_IMAGE_REPOSITORY }}:${{ steps.get-image-tag.outputs.image-tag }}
+      - name: Deploy ECS task on service
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.render-task-definition.outputs.task-definition }}
+          service: ${{ github.event.inputs.service_name }}-${{ github.event.inputs.environment }}-service
+          cluster: ${{ github.event.inputs.service_name }}-${{ github.event.inputs.environment }}-cluster
+          wait-for-service-stability: true
