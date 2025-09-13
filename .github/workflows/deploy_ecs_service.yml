@@ -13,7 +13,7 @@ on:
       deploy_target:
         description: Tag name or branch name to deploy e.g. v1.0.0, develop ~
         required: true
-        default: main
+        default: master
       aws_region:
         description: AWS Region
         required: true
