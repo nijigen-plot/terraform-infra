@@ -1,7 +1,5 @@
 Terraformで作るインフラ群をまとめるリポジトリ
 
-[Terraformではじめる実線IaC](https://www.oreilly.co.jp/books/9784814400133/)を参考にしています。
-
 ## VSCode 拡張
 
 https://marketplace.visualstudio.com/items?itemName=HashiCorp.terraform
@@ -10,7 +8,19 @@ https://marketplace.visualstudio.com/items?itemName=HashiCorp.terraform
 
 フォルダ階層はこんな感じになってます。
 
+```:tree -L 2
+.
+├── README.md
+├── aws
+│   ├── import (AWS コンソール作成のリソースを取り込む専用)
+│   └── tutorial ([Terraformではじめる実線IaC](https://www.oreilly.co.jp/books/9784814400133/)のリソース)
+├── github
+│   ├── README.md
+│   └── repository
 ```
+
+
+```:tree -L 3以降
 .
 ├── README.md
 ├── aws (プロバイダ名)
