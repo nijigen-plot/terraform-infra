@@ -77,6 +77,26 @@ provider "aws" {
 }
 ```
 
+### import
+
+https://developer.hashicorp.com/terraform/language/import
+
+```
+import {
+  to =
+  id =
+}
+```
+
+1. importブロックを上記のように追加する
+  1. to -> resourcesの文字列
+  2. id = 1で定義したresourcesに対応する文字列。よって`id`のキー部分もリソースによって違うと思う
+2. `terraform plan`を実行
+3. 出てきた差分をtxtなんかにして出力
+4. それをresourcesに適用する。（AIとかつかうとはやいよ）
+  1. 3,4番はこれを繰り返すことで足りないリソース判明→importで全て取り込めるようになる
+5. 差分が無くなったら`terraform apply`!
+
 ## Knowledge
 
 https://developer.hashicorp.com/terraform/docs
