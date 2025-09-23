@@ -1,7 +1,5 @@
 Terraformで作るインフラ群をまとめるリポジトリ
 
-[Terraformではじめる実線IaC](https://www.oreilly.co.jp/books/9784814400133/)を参考にしています。
-
 ## VSCode 拡張
 
 https://marketplace.visualstudio.com/items?itemName=HashiCorp.terraform
@@ -10,7 +8,19 @@ https://marketplace.visualstudio.com/items?itemName=HashiCorp.terraform
 
 フォルダ階層はこんな感じになってます。
 
+```:tree -L 2
+.
+├── README.md
+├── aws
+│   ├── import (AWS コンソール作成のリソースを取り込む専用)
+│   └── tutorial ([Terraformではじめる実線IaC](https://www.oreilly.co.jp/books/9784814400133/)のリソース)
+├── github
+│   ├── README.md
+│   └── repository
 ```
+
+
+```:tree -L 3以降
 .
 ├── README.md
 ├── aws (プロバイダ名)
@@ -76,6 +86,26 @@ provider "aws" {
   }
 }
 ```
+
+### import
+
+https://developer.hashicorp.com/terraform/language/import
+
+```
+import {
+  to =
+  id =
+}
+```
+
+1. importブロックを上記のように追加する
+  1. to -> resourcesの文字列
+  2. id = 1で定義したresourcesに対応する文字列。よって`id`のキー部分もリソースによって違うと思う
+2. `terraform plan`を実行
+3. 出てきた差分をtxtなんかにして出力
+4. それをresourcesに適用する。（AIとかつかうとはやいよ）
+  1. 3,4番はこれを繰り返すことで足りないリソース判明→importで全て取り込めるようになる
+5. 差分が無くなったら`terraform apply`!
 
 ## Knowledge
 
